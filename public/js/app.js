@@ -1961,6 +1961,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 
@@ -2013,7 +2014,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "HabibInputWithSuggestionComponent",
-  props: ['apiUrl'],
+  props: ['apiUrl', 'initialValue'],
   watch: {
     searchTxt: function searchTxt() {
       if (this.searchTxt === '') {
@@ -2038,8 +2039,16 @@ __webpack_require__.r(__webpack_exports__);
         return response.data;
       }).then(function (data) {
         if (_this.searchTxt !== '') {
-          that.items = data;
           document.getElementById("results").style.display = 'block';
+
+          if (data.length < 1) {
+            that.items = [{
+              id: -1,
+              name: 'No results found'
+            }];
+          } else {
+            that.items = data;
+          }
         }
       });
     }, 500),
@@ -2049,6 +2058,9 @@ __webpack_require__.r(__webpack_exports__);
       this.$emit('item-selected', id);
       document.getElementById("results").style.display = 'none';
     }
+  },
+  mounted: function mounted() {
+    document.getElementById('input').defaultValue = this.initialValue;
   }
 });
 
@@ -38438,7 +38450,10 @@ var render = function() {
       _c("habib-money-label-component", { attrs: { value: _vm.moneyValue } }),
       _vm._v(" "),
       _c("habib-input-with-suggestion-component", {
-        attrs: { "api-url": "https://jsonplaceholder.typicode.com/users" },
+        attrs: {
+          "api-url": "https://jsonplaceholder.typicode.com/users",
+          "initial-value": "habib"
+        },
         on: { "item-selected": _vm.itemSelected }
       })
     ],
@@ -38469,7 +38484,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { attrs: { id: "input-with-suggestion" } }, [
     _c("input", {
-      attrs: { type: "text" },
+      attrs: { id: "input", type: "text" },
       domProps: { value: _vm.searchTxt },
       on: {
         input: function($event) {

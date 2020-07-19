@@ -1,6 +1,6 @@
 <template>
     <div id="input-with-suggestion">
-        <input type="text" :value="searchTxt" @input="searchTxt = $event.target.value">
+        <input id="input" type="text" :value="searchTxt" @input="searchTxt = $event.target.value">
         <div id="dummy-for-position">
             <div id="results">
                 <div :id="item.id" class="item" @click="itemSelected" v-for="item in items">
@@ -16,7 +16,7 @@
     export default {
         name: "HabibInputWithSuggestionComponent",
         props: [
-            'apiUrl'
+            'apiUrl', 'initialValue'
         ],
         watch: {
             searchTxt() {
@@ -41,8 +41,12 @@
                     }
                 ).then(data => {
                     if(this.searchTxt !== '') {
-                        that.items = data;
                         document.getElementById("results").style.display = 'block';
+                        if(data.length < 1) {
+                            that.items = [{id: -1, name: 'No results found'}];
+                        } else {
+                            that.items = data;
+                        }
                     }
                 })
             }, 500),
@@ -52,6 +56,9 @@
                 this.$emit('item-selected', id);
                 document.getElementById("results").style.display = 'none';
             }
+        },
+        mounted() {
+            document.getElementById('input').defaultValue = this.initialValue;
         }
     }
 </script>

@@ -9,6 +9,7 @@
         <habib-money-label-component :value="moneyValue"></habib-money-label-component>
         <habib-input-with-suggestion-component
             api-url="https://jsonplaceholder.typicode.com/users"
+            initial-value="habib"
             @item-selected="itemSelected">
 
         </habib-input-with-suggestion-component>
