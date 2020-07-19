@@ -3,9 +3,7 @@
         <input id="input" type="text" :value="searchTxt" @input="searchTxt = $event.target.value">
         <div id="dummy-for-position">
             <div id="results">
-                <div :id="item.id" class="item" @click="itemSelected" v-for="item in items">
-                    {{item.name}}
-                </div>
+                <div :id="item.id" class="item" @click="itemSelected" v-for="item in items">{{item.name}}</div>
             </div>
         </div>
         hello
@@ -16,7 +14,7 @@
     export default {
         name: "HabibInputWithSuggestionComponent",
         props: [
-            'apiUrl', 'initialValue'
+            'apiUrl', 'initialValue', 'headers'
         ],
         watch: {
             searchTxt() {
@@ -36,7 +34,9 @@
         methods: {
             beginSearch: _.debounce(function () {
                 let that = this;
-                axios.get(that.apiUrl).then(response => {
+                axios.get(that.apiUrl + that.searchTxt, {
+                    headers: that.headers
+                }).then(response => {
                         return response.data;
                     }
                 ).then(data => {
@@ -55,6 +55,7 @@
                 console.log(id);
                 this.$emit('item-selected', id);
                 document.getElementById("results").style.display = 'none';
+                document.getElementById('input').value = event.target.innerText;
             }
         },
         mounted() {
