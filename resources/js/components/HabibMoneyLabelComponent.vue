@@ -1,6 +1,5 @@
 <template>
-    <span id="money-label"></span>
-
+    <span>{{moneyValue}}</span>
 </template>
 
 <script>
@@ -9,23 +8,15 @@
         props: [
             'value'
         ],
-        watch: {
-            value(newVal) {
-                this.setValue(newVal);
-            }
-        },
-        methods: {
-            setValue(value) {
-                let onlyNumbers = value.replace(/[^0-9]/g, '');
+        computed: {
+            moneyValue() {
+                let onlyNumbers = this.value.replace(/[^0-9]/g, '');
                 let onlyNumbersArr = onlyNumbers.split('');
                 for (let i = onlyNumbersArr.length - 3; i > 0; i -= 3) {
                     onlyNumbersArr.splice(i, 0, ',');
                 }
-                document.getElementById('money-label').innerText = onlyNumbersArr.join('');
+                return  onlyNumbersArr.join('');
             }
-        },
-        mounted() {
-            this.setValue(this.value);
         }
     }
 </script>
